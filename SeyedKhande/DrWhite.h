@@ -8,6 +8,6 @@ public:
 	virtual Hero::targetorteamtype playertarget(int x) override;
 	virtual void ability1(Hero::context& c, vector <Effect>& list) override;
 	virtual void ability2(Hero::context& c, vector <Effect>& list) override;
-	virtual bool special(Hero::context& c, vector <Effect>& list) override;
+	virtual bool special(Hero::context& c, vector <Effect>& list) override; 
 };
 

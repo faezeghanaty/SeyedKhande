@@ -56,7 +56,7 @@ void DrWhite::ability1(Hero::context& c, vector <Effect>& list)
 		c.team[u]->heal(40);
 		c.target[c.targetindex]->reducingHP(40);
 		reducingenergy(3);
-	}
+	} 
 }
 
 void DrWhite::ability2(Hero::context& c, vector <Effect>& list)
