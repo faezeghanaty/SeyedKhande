@@ -48,7 +48,7 @@ void SmallTaha::ability1(Hero::context& c, vector<Effects>& list)
 	bool f = false;
 	for (auto x : list)
 	{
-		if (x.getclassname() == "DrWhite" && x == c.target[c.targetindex]->getname() && x.isactive())
+		if (x.getclassname() == "DrWhite" && x == name && x.isactive())
 		{
 			int p = x.applypercent(30);
 			c.target[c.targetindex]->reducingHP(p);

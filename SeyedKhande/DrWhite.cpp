@@ -59,7 +59,7 @@ void DrWhite::ability1(Hero::context& c, vector <Effects>& list)
 	}
 	for (auto x : list)
 	{
-		if (x == c.target[c.targetindex]->getname() && x.getclassname()== "DrWhite" && x.isactive())
+		if (x == name && x.getclassname()== "DrWhite" && x.isactive())
 		{
 			int p = x.applypercent(40);
 			c.team[u]->heal(p);

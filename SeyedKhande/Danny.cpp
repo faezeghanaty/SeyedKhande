@@ -52,7 +52,7 @@ void Danny::ability1(Hero::context& c, vector<Effects>& list)
 			c.target[c.targetindex]->reducingHP(32);
 			f = true;
 		}
-		else if (x.getclassname() == "DrWhite" && x == c.target[c.targetindex]->getname() && x.isactive())
+		else if (x.getclassname() == "DrWhite" && x == name && x.isactive())
 		{
 
 			int p = x.applypercent(20);
@@ -72,9 +72,32 @@ void Danny::ability1(Hero::context& c, vector<Effects>& list)
 
 void Danny::ability2(Hero::context& c, vector<Effects>& list)
 {
+	bool a;
+	for (auto x : list)
+	{
+		if (x == name && x.getclassname() == "DrWhite" && x.isactive())
+		{
+			int p = x.applypercent(50);
+			c.target[2]->reducingHP(p);
+			c.target[c.targetindex]->reducingHP(p);
+			a = true;
+		}
+	}
+	if (!a)
+	{
+		c.target[2]->reducingHP(50);
+		c.target[c.targetindex]->reducingHP(50);
+	}
 }
 
 bool Danny::special(Hero::context& c, vector<Effects>& list)
 {
-	return false;
+	if (rounds == activespecialpower)
+	{
+		return 0;
+	}
+	c.team[0]->heal(250);
+	Effects e(name, c.team[0]->getname(), 1, 0, c.team[0]->getHP());
+	list.emplace_back(e);
+	return 1;
 }
