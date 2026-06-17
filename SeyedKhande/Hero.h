@@ -1,27 +1,50 @@
 #pragma once
 #include <string>
+#include <vector>
+#include <random>
+#include "Effect.h"
 using namespace std;
-class Heros
+class Hero
 {
-private:
-	int activespecialpower;
-	string role;
-	long int HP;
-	int energy;
+protected:
+	
+	string name;
 	string sentence;
-	bool isdead = false;
+	string role;
+	int activespecialpower;
+	int energy;
 	int rounds;
+	long int HP;
+	long int maxHP;
+	bool isdead ;
+	bool ishidden ;
 public:
-	Heros();
-	virtual ~Heros() {}
-	void isalive();
+	struct context {
+		vector<Hero*>& team;
+		vector<Hero*>& target;
+		int targetindex = -1;
+		int teamindex = -1;
+
+	};
+	enum targetorteamtype 
+	{highest,optional,random,lowest,nobody};
+	Hero(string name,int active,string role,long int HP,int energy,string sentence,bool isdead = false,int round = 0,bool ishidden = false);
+	virtual ~Hero() {}
+	bool isalive();
+	long int getHP();
+	string getname() const;
 	void countrounds();
 	void heal(long int x);
-	long int reducingHP(long int x);
-	int getenergy() const;
-	virtual void ability1(Heros& target, Heros& team) = 0;
-	virtual void ability2(Heros& target, Heros& team) = 0;
-	virtual void special(Heros& target, Heros& team) = 0;
+	void reducingHP(long int x);
+	void reducingenergy(int x);
+	virtual void ability1(context & c,vector <Effect> & list) = 0;
+	virtual void ability2(context& c, vector <Effect>& list) = 0;
+	virtual bool special(context& c, vector <Effect>& list) = 0; //false = tedad dor ha kafi nist
+	virtual targetorteamtype playerteam(int x) = 0;
+	virtual targetorteamtype playertarget(int x) = 0;
+
+	int rm(int min, int max);
+	
 };
 
 
