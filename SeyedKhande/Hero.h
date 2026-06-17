@@ -12,7 +12,6 @@ protected:
 	string sentence;
 	string role;
 	int activespecialpower;
-	int energy;
 	int rounds;
 	long int HP;
 	long int maxHP;
@@ -28,7 +27,7 @@ public:
 	};
 	enum targetorteamtype 
 	{highest,optional,random,lowest,nobody};
-	Hero(string name,int active,string role,long int HP,int energy,string sentence,bool isdead = false,int round = 0,bool ishidden = false);
+	Hero(string name,int active,string role,long int HP,string sentence,bool isdead = false,int round = 0,bool ishidden = false);
 	virtual ~Hero() {}
 	bool isalive();
 	long int getHP();
@@ -37,6 +36,7 @@ public:
 	void heal(long int x);
 	void reducingHP(long int x);
 	virtual int getenergy(int x) = 0;
+	virtual string getsentence() = 0;
 	virtual void ability1(context & c,vector <Effects> & list) = 0;
 	virtual void ability2(context& c, vector <Effects>& list) = 0;
 	virtual bool special(context& c, vector <Effects>& list) = 0; //false = tedad dor ha kafi nist

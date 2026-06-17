@@ -1,6 +1,6 @@
 #include "DrWhite.h"
 
-DrWhite::DrWhite(int energy) : Hero("DrWhite", 4, "Healer", 550, energy, "Biaridesh roy miz ... zende mimone age shanse biyare.")
+DrWhite::DrWhite() : Hero("DrWhite", 4, "Healer", 550, "Biaridesh roy miz ... zende mimone age shanse biyare.")
 {
 
 }
@@ -40,6 +40,11 @@ int DrWhite::getenergy(int x)
 	}
 }
 
+string DrWhite::getsentence()
+{
+	return sentence;
+}
+
 void DrWhite::ability1(Hero::context& c, vector <Effects>& list)
 {
 	bool a = false;
@@ -54,7 +59,7 @@ void DrWhite::ability1(Hero::context& c, vector <Effects>& list)
 	}
 	for (auto x : list)
 	{
-		if (x == name && x.getclassname()== "DrWhite" && x.isactive())
+		if (x == c.target[c.targetindex]->getname() && x.getclassname()== "DrWhite" && x.isactive())
 		{
 			int p = x.applypercent(40);
 			c.team[u]->heal(p);
@@ -74,7 +79,7 @@ void DrWhite::ability1(Hero::context& c, vector <Effects>& list)
 void DrWhite::ability2(Hero::context& c, vector <Effects>& list)
 {
 
-	Effects drwhite("DrWhite", c.team[c.teamindex]->getname(), 2, 20);
+	Effects drwhite(name, c.team[c.teamindex]->getname(), 2, 20);
 	list.emplace_back(drwhite);
 
 }

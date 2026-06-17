@@ -1,5 +1,5 @@
 #include "SmallTaha.h"
-SmallTaha::SmallTaha(int energy) : Hero("SmallTaha",3,"Healer",500,energy,"Hame dar jay khod!in mantaqe alode ast")
+SmallTaha::SmallTaha() : Hero("SmallTaha",3,"Healer",500,"Hame dar jay khod!in mantaqe alode ast")
 {
 
 }
@@ -37,22 +37,27 @@ int SmallTaha::getenergy(int x)
 	}
 }
 
+string SmallTaha::getsentence()
+{
+	return sentence;
+}
+
 void SmallTaha::ability1(Hero::context& c, vector<Effects>& list)
 {
 	c.team[0]->heal(20);
 	bool f = false;
 	for (auto x : list)
 	{
-		if (x.getclassname() == "DrWhite" && x == name && x.isactive())
+		if (x.getclassname() == "DrWhite" && x == c.target[c.targetindex]->getname() && x.isactive())
 		{
 			int p = x.applypercent(30);
-			c.team[c.targetindex]->reducingHP(p);
+			c.target[c.targetindex]->reducingHP(p);
 			f = true;
 		}
 	}
 	if (!f)
 	{
-		c.team[c.targetindex]->reducingHP(30);
+		c.target[c.targetindex]->reducingHP(30);
 	}
 
 }

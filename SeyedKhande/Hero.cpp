@@ -1,7 +1,7 @@
 #include "Hero.h"
 
 
-Hero::Hero(string name,int active, string role, long int HP, int energy, string sentence, bool isdead, int round, bool ishidden) : name(name),activespecialpower(active), role(role), HP(HP), energy(energy), sentence(sentence), rounds(round),maxHP(HP)
+Hero::Hero(string name,int active, string role, long int HP, string sentence, bool isdead, int round, bool ishidden) : name(name),activespecialpower(active), role(role), HP(HP), sentence(sentence), rounds(round),maxHP(HP)
 {
 }
 
