@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <random>
-#include "Effect.h"
+#include "Effects.h"
 using namespace std;
 class Hero
 {
@@ -36,13 +36,12 @@ public:
 	void countrounds();
 	void heal(long int x);
 	void reducingHP(long int x);
-	void reducingenergy(int x);
-	virtual void ability1(context & c,vector <Effect> & list) = 0;
-	virtual void ability2(context& c, vector <Effect>& list) = 0;
-	virtual bool special(context& c, vector <Effect>& list) = 0; //false = tedad dor ha kafi nist
+	virtual int getenergy(int x) = 0;
+	virtual void ability1(context & c,vector <Effects> & list) = 0;
+	virtual void ability2(context& c, vector <Effects>& list) = 0;
+	virtual bool special(context& c, vector <Effects>& list) = 0; //false = tedad dor ha kafi nist
 	virtual targetorteamtype playerteam(int x) = 0;
 	virtual targetorteamtype playertarget(int x) = 0;
-
 	int rm(int min, int max);
 	
 };

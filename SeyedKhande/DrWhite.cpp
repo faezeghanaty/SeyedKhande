@@ -29,6 +29,17 @@ Hero::targetorteamtype DrWhite::playertarget(int x)
 	}
 }
 
+int DrWhite::getenergy(int x)
+{
+	switch (x)
+	{
+	case 1: return 3; break;
+	case 2: return 4; break;
+	case 3: return 4; break;
+	default: break;
+	}
+}
+
 void DrWhite::ability1(Hero::context& c, vector <Effects>& list)
 {
 	bool a = false;
@@ -57,7 +68,7 @@ void DrWhite::ability1(Hero::context& c, vector <Effects>& list)
 		c.target[c.targetindex]->reducingHP(40);
 		
 	} 
-	reducingenergy(3);
+
 }
 
 void DrWhite::ability2(Hero::context& c, vector <Effects>& list)
@@ -65,7 +76,7 @@ void DrWhite::ability2(Hero::context& c, vector <Effects>& list)
 
 	Effects drwhite("DrWhite", c.team[c.teamindex]->getname(), 2, 20);
 	list.emplace_back(drwhite);
-	reducingenergy(4);
+
 }
 
 bool DrWhite::special(Hero::context& c, vector <Effects>& list)
@@ -79,7 +90,7 @@ bool DrWhite::special(Hero::context& c, vector <Effects>& list)
 		int z = c.team[c.teamindex]->getHP();
 		c.team[c.teamindex]->heal(z + 200);
 	}
-	reducingenergy(4);
+
 
 	return 1;
 }

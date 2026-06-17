@@ -36,6 +36,10 @@ void Hero::heal(long int x)
 	{
 		HP = HP + x;
 	}
+	else
+	{
+		HP = maxHP;
+	}
 }
 
 void Hero::reducingHP(long int x)
@@ -43,12 +47,6 @@ void Hero::reducingHP(long int x)
 	HP = HP - x;
 	isalive();
 	
-}
-
-
-void Hero::reducingenergy(int x)
-{
-	energy -= x;
 }
 
 int Hero::rm(int min, int max)
