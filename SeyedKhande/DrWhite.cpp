@@ -29,7 +29,7 @@ Hero::targetorteamtype DrWhite::playertarget(int x)
 	}
 }
 
-void DrWhite::ability1(Hero::context& c, vector <Effect>& list)
+void DrWhite::ability1(Hero::context& c, vector <Effects>& list)
 {
 	bool a = false;
 	int u;
@@ -43,7 +43,7 @@ void DrWhite::ability1(Hero::context& c, vector <Effect>& list)
 	}
 	for (auto x : list)
 	{
-		if (x == name && !x.isactive())
+		if (x == name && x.getclassname()== "DrWhite" && x.isactive())
 		{
 			int p = x.applypercent(40);
 			c.team[u]->heal(p);
@@ -55,47 +55,31 @@ void DrWhite::ability1(Hero::context& c, vector <Effect>& list)
 	{
 		c.team[u]->heal(40);
 		c.target[c.targetindex]->reducingHP(40);
-		reducingenergy(3);
+		
 	} 
+	reducingenergy(3);
 }
 
-void DrWhite::ability2(Hero::context& c, vector <Effect>& list)
+void DrWhite::ability2(Hero::context& c, vector <Effects>& list)
 {
 
-	Effect drwhite(20, 2,(c.team[c.teamindex])->getname());
+	Effects drwhite("DrWhite", c.team[c.teamindex]->getname(), 2, 20);
 	list.emplace_back(drwhite);
 	reducingenergy(4);
 }
 
-bool DrWhite::special(Hero::context& c, vector <Effect>& list)
+bool DrWhite::special(Hero::context& c, vector <Effects>& list)
 {
 	if (rounds == activespecialpower)
 	{
 		return 0;
 	}
-	bool a = false;
-	for (auto x : list)
+	if (!c.team[c.teamindex]->isalive())
 	{
-		if (x == name && !x.isactive())
-		{
-			
-			if (!c.team[c.teamindex]->isalive())
-			{
-				int z = x.applypercent((c.team[c.teamindex]->getHP() + 200));
-				c.team[c.teamindex]->heal(z);
-			}
-			reducingenergy(4);
-			a = true;
-		}
+		int z = c.team[c.teamindex]->getHP();
+		c.team[c.teamindex]->heal(z + 200);
 	}
-	if (!a)
-	{
-		if (!c.team[c.teamindex]->isalive())
-		{
-			int z = c.team[c.teamindex]->getHP();
-			c.team[c.teamindex]->heal(z + 200);
-		}
-		reducingenergy(4);
-	}
+	reducingenergy(4);
+
 	return 1;
 }
