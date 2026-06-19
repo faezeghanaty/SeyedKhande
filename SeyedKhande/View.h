@@ -21,6 +21,7 @@ public:
 	void showround(int x,int y);
 	void showstatus(string name, long int HP);
 	void showenergy(int x);
+	void notenough();
 	int whichherodoaction();
 	int whichability();
 	void Showsentence(string sentence);

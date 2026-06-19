@@ -74,6 +74,11 @@ void View::showenergy(int x)
 	cout << "Energy : " << x << endl;
 }
 
+void View::notenough()
+{
+	cout << "Energy is not enough!" << endl;
+}
+
 int View::whichherodoaction()
 {
 	int a;
