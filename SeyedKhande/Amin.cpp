@@ -2,7 +2,7 @@
 
 Amin::Amin() : Hero("Amin",3,"Attacker",500,"1 2 3 boom! che kasi mond? mohem nist")
 {
-	last = false;
+	last = 1;
 }
 
 Hero::targetorteamtype Amin::playerteam(int x)
@@ -45,63 +45,134 @@ string Amin::getsentence()
 
 void Amin::ability1(Hero::context& c, vector<Effects>& list)
 {
-	int l = 55;
+	int l = 55 * last;
 	bool d = false;
-	if (last)
-		l = 110;
-	for (auto x : list)
+	if (!list.empty())
 	{
-		if (x.getclassname() == "DrWhite" && name == x && x.isactive())
+		for (auto x : list)
 		{
-			int f = x.applypercent(l);
-			c.target[c.targetindex]->reducingHP(f);
-			d = true;
+			if (x.getclassname() == "DrWhite" && name == x && x.isactive())
+			{
+				int f = x.applypercent(l);
+				if (reverse)
+				{
+					c.target[c.targetindex]->heal(f);
+				}
+				else
+				{
+					c.target[c.targetindex]->reducingHP(f);
+				}
+				
+				d = true;
+			}
 		}
 	}
+	
 	if (!d)
 	{
-		c.target[c.targetindex]->reducingHP(l);
+		if (reverse)
+		{
+			c.target[c.targetindex]->heal(l);
+		}
+		else
+		{
+			c.target[c.targetindex]->reducingHP(l);
+		}
 	}
 	if (!c.target[c.targetindex]->isalive())
 	{
-		last = true;
+		last *= 2;
 	}
 
 }
 
 void Amin::ability2(Hero::context& c, vector<Effects>& list)
 {
-	c.team[c.teamindex]->reducingHP(25);
-	heal(75);
+	if (reverse)
+	{
+		c.team[c.targetindex]->heal(25);
+		reducingHP(75);
+	}
+	else
+	{
+		c.team[c.teamindex]->reducingHP(25);
+		heal(75);
+	}
 }
 
-bool Amin::special(Hero::context& c, vector<Effects>& list)
+void Amin::special(Hero::context& c, vector<Effects>& list)
 {
-	if (rounds == activespecialpower)
+	bool d = false;
+	
+	int s;
+	while (1)
 	{
-		return 0;
-	}
-	bool d;
-	int s = rm(1, 3) - 1;
-	for (auto x : list)
-	{
-		if (x.getclassname() == "DrWhite" && name == x && x.isactive())
+		s = rm(1, 3) - 1;
+		if (c.target[s]->candoaction())
 		{
-			int f = x.applypercent(250);
-			c.target[s]->reducingHP(f);
-			d = true;
+			break;
 		}
 	}
+	
+	if (!list.empty())
+	{
+		for (auto x : list)
+		{
+			if (x.getclassname() == "DrWhite" && name == x && x.isactive())
+			{
+				int f = x.applypercent(250);
+				if (reverse)
+				{
+					c.target[s]->heal(f);
+					for (int y = 0; y < 3; y++)
+					{
+						if (c.team[y]->getname() != name && c.team[y]->isalive())
+						{
+							c.team[y]->heal(30);
+						}
+					}
+				}
+				else
+				{
+					c.target[s]->reducingHP(f);
+					for (int y = 0; y < 3; y++)
+					{
+						if (c.team[y]->getname() != name && c.team[y]->isalive())
+						{
+							c.team[y]->reducingHP(30);
+						}
+					}
+				}
+				d = true;
+				
+			}
+		}
+	}
+	
 	if (!d)
 	{
-		c.target[s]->reducingHP(250);
-	}
-	for (int y = 0; y < 3; y++)
-	{
-		if (c.team[y]->getname() != name)
+		if (reverse)
 		{
-			c.team[y]->reducingHP(30);
+			c.target[s]->heal(250);
+			for (int y = 0; y < 3; y++)
+			{
+				if (c.team[y]->getname() != name && c.team[y]->isalive())
+				{
+					c.team[y]->heal(30);
+				}
+			}
+		}
+		else
+		{
+			c.target[s]->reducingHP(250);
+			for (int y = 0; y < 3; y++)
+			{
+				if (c.team[y]->getname() != name && c.team[y]->isalive())
+				{
+					c.team[y]->reducingHP(30);
+				}
+			}
 		}
 	}
-	return 1;
+	
 }

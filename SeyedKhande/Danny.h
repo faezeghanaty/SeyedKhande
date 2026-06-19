@@ -3,6 +3,7 @@
 class Danny : public Hero
 {
 public:
+	float d;
 	Danny();
 	virtual Hero::targetorteamtype playerteam(int x) override;
 	virtual Hero::targetorteamtype playertarget(int x) override;
@@ -10,7 +11,7 @@ public:
 	virtual string getsentence();
 	virtual void ability1(Hero::context& c, vector <Effects>& list) override;
 	virtual void ability2(Hero::context& c, vector <Effects>& list) override;
-	virtual bool special(Hero::context& c, vector <Effects>& list) override;
+	virtual void special(Hero::context& c, vector <Effects>& list) override;
 };
 
 

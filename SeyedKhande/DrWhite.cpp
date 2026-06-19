@@ -52,25 +52,45 @@ void DrWhite::ability1(Hero::context& c, vector <Effects>& list)
 	while (1)
 	{
 		u = rm(1, 3) - 1;
-		if (c.team[a]->isalive())
+		if (c.team[a]->candoaction())
 		{
 			break;
 		}
 	}
-	for (auto x : list)
+	if (!list.empty())
 	{
-		if (x == name && x.getclassname()== "DrWhite" && x.isactive())
+		for (auto x : list)
 		{
-			int p = x.applypercent(40);
-			c.team[u]->heal(p);
-			c.target[c.targetindex]->reducingHP(p);
-			a = true;
+			if (x == name && x.getclassname() == "DrWhite" && x.isactive())
+			{
+				int p = x.applypercent(40);
+				if (reverse)
+				{
+					c.team[u]->reducingHP(p);
+					c.target[c.targetindex]->heal(p);
+				}
+				else
+				{
+					c.team[u]->heal(p);
+					c.target[c.targetindex]->reducingHP(p);
+				}
+				
+				a = true;
+			}
 		}
 	}
 	if (!a)
 	{
-		c.team[u]->heal(40);
-		c.target[c.targetindex]->reducingHP(40);
+		if (reverse)
+		{
+			c.team[u]->reducingHP(40);
+			c.target[c.targetindex]->heal(40);
+		}
+		else
+		{
+			c.team[u]->heal(40);
+			c.target[c.targetindex]->reducingHP(40);
+		}
 		
 	} 
 
@@ -84,18 +104,11 @@ void DrWhite::ability2(Hero::context& c, vector <Effects>& list)
 
 }
 
-bool DrWhite::special(Hero::context& c, vector <Effects>& list)
+void DrWhite::special(Hero::context& c, vector <Effects>& list)
 {
-	if (rounds == activespecialpower)
-	{
-		return 0;
-	}
 	if (!c.team[c.teamindex]->isalive())
 	{
 		int z = c.team[c.teamindex]->getHP();
 		c.team[c.teamindex]->heal(z + 200);
 	}
-
-
-	return 1;
 }

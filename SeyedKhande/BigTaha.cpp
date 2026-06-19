@@ -2,6 +2,7 @@
 
 BigTaha::BigTaha() : Hero("BigTaha",4,"Attacker",500,"In yeki baraye dadash kochikam bood..hala nobat toe")
 {
+	
 }
 
 Hero::targetorteamtype BigTaha::playerteam(int x)
@@ -44,49 +45,108 @@ string BigTaha::getsentence()
 
 void BigTaha::ability1(Hero::context& c, vector<Effects>& list)
 {
-	bool a;
-	for (auto x : list)
+	bool a = false;
+	if (!list.empty())
 	{
-		if (x == name && x.getclassname() == "DrWhite" && x.isactive())
+		for (auto x : list)
 		{
-			int p = x.applypercent(30);
-			for (int y = 0; y < 3; y++)
+			if (x == name && x.getclassname() == "DrWhite" && x.isactive())
 			{
-				c.target[y]->reducingHP(p);
+				int p = x.applypercent(30);
+				if (reverse)
+				{
+					for (int y = 0; y < 3; y++)
+					{
+						if (c.target[y]->isalive())
+						{
+							c.target[y]->heal(p);
+						}
+						
+					}
+				}
+				else
+				{
+					for (int y = 0; y < 3; y++)
+					{
+						if (c.target[y]->isalive())
+						{
+							c.target[y]->reducingHP(p);
+						}
+					}
+				}
+				a = true;
 			}
-			a = true;
 		}
 	}
+	
 	if (!a)
 	{
-		for (int y = 0; y < 3; y++)
+		if (reverse)
 		{
-			c.target[y]->reducingHP(30);
+			for (int y = 0; y < 3; y++)
+			{
+				if (c.target[y]->isalive())
+				{
+					c.target[y]->heal(30);
+				}
+
+			}
+		}
+		else
+		{
+			for (int y = 0; y < 3; y++)
+			{
+				if (c.target[y]->isalive())
+				{
+					c.target[y]->reducingHP(30);
+				}
+			}
 		}
 	}
 }
 
 void BigTaha::ability2(Hero::context& c, vector<Effects>& list)
 {
-	c.target[c.targetindex]->reducingHP(90);
-	ishidden = true;
-}
-
-bool BigTaha::special(Hero::context& c, vector<Effects>& list)
-{
-	if (rounds == activespecialpower)
+	if (reverse)
 	{
-		return 0;
-	}
-	long int y = c.target[c.targetindex]->getHP();
-	if (y < 360)
-	{
-		c.target[c.targetindex]->reducingHP(y);
+		c.target[c.targetindex]->heal(90);
 	}
 	else
 	{
-		c.target[c.targetindex]->reducingHP(200);
+		c.target[c.targetindex]->reducingHP(90);
 	}
-	Effects e(name, c.target[c.targetindex]->getname(), 1, 360);
-	return 1;
+	Effects e(name, name, 1);
+	
+}
+
+void BigTaha::special(Hero::context& c, vector<Effects>& list)
+{
+	
+	long int y = c.target[c.targetindex]->getHP();
+	if (reverse)
+	{
+		if (y < 360)
+		{
+			c.target[c.targetindex]->heal(y);
+		}
+		else
+		{
+			c.target[c.targetindex]->heal(200);
+		}
+		Effects e(name, c.target[c.targetindex]->getname(), 1, -360);
+	}
+	else
+	{
+		if (y < 360)
+		{
+			c.target[c.targetindex]->reducingHP(y);
+		}
+		else
+		{
+			c.target[c.targetindex]->reducingHP(200);
+		}
+		Effects e(name, c.target[c.targetindex]->getname(), 1, 360);
+	}
+	
+	
 }

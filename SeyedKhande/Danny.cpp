@@ -2,6 +2,7 @@
 
 Danny::Danny() : Hero("Danny",4,"Defender",600,"Hichkas iz in khat rad nemishe!")
 {
+	d = 1;
 }
 
 Hero::targetorteamtype Danny::playerteam(int x)
@@ -45,20 +46,38 @@ string Danny::getsentence()
 void Danny::ability1(Hero::context& c, vector<Effects>& list)
 {
 	bool f = false;
-	for (auto x : list)
+	if (!list.empty())
 	{
-		if (x.getclassname() == name && x == c.target[c.targetindex]->getname() && x.isactive())
+		for (auto x : list)
 		{
-			c.target[c.targetindex]->reducingHP(32);
-			f = true;
-		}
-		else if (x.getclassname() == "DrWhite" && x == name && x.isactive())
-		{
-
-			int p = x.applypercent(20);
-			c.target[c.targetindex]->reducingHP(p);
-			f = true;
-			Effects e(name, c.target[c.targetindex]->getname(), 1);
+			if (x.getclassname() == name && x == c.target[c.targetindex]->getname() && x.isactive())
+			{
+				d *= 1.6;
+				if (reverse)
+				{
+					c.target[c.targetindex]->heal(20 * d);
+				}
+				else
+				{
+					c.target[c.targetindex]->reducingHP(20 * d);
+				}
+				
+				f = true;
+			}
+			else if (x.getclassname() == "DrWhite" && x == name && x.isactive())
+			{
+				int p = x.applypercent(20);
+				if (reverse)
+				{
+					c.target[c.targetindex]->heal(p);
+				}
+				else
+				{
+					c.target[c.targetindex]->reducingHP(p);
+				}
+				f = true;
+				Effects e(name, c.target[c.targetindex]->getname(), 1);
+			}
 		}
 	}
 	if (!f)
@@ -72,32 +91,108 @@ void Danny::ability1(Hero::context& c, vector<Effects>& list)
 
 void Danny::ability2(Hero::context& c, vector<Effects>& list)
 {
-	bool a;
-	for (auto x : list)
+	bool a = false;
+	int m = 2;
+	if (!list.empty())
 	{
-		if (x == name && x.getclassname() == "DrWhite" && x.isactive())
+		for (auto x : list)
 		{
-			int p = x.applypercent(50);
-			c.target[2]->reducingHP(p);
-			c.target[c.targetindex]->reducingHP(p);
-			a = true;
+			if (x == name && x.getclassname() == "DrWhite" && x.isactive())
+			{
+				
+				int p = x.applypercent(50);
+				if (reverse)
+				{
+					
+					while (m >=0)
+					{
+						if (c.target[m]->candoaction())
+						{
+							c.target[m]->heal(p);
+							break;
+						}
+						else
+						{
+							m--;
+						}
+					}
+					
+					c.target[c.targetindex]->heal(p);
+				}
+				else
+				{
+					while (m >= 0)
+					{
+						if (c.target[m]->candoaction())
+						{
+							c.target[m]->reducingHP(p);
+							break;
+						}
+						else
+						{
+							m--;
+						}
+					}
+					c.target[c.targetindex]->reducingHP(p);
+				}
+				
+				a = true;
+			}
 		}
 	}
 	if (!a)
 	{
-		c.target[2]->reducingHP(50);
-		c.target[c.targetindex]->reducingHP(50);
+		if (reverse)
+		{
+
+			while (m >= 0)
+			{
+				if (c.target[m]->candoaction())
+				{
+					c.target[m]->heal(50);
+					break;
+				}
+				else
+				{
+					m--;
+				}
+			}
+
+			c.target[c.targetindex]->heal(50);
+		}
+		else
+		{
+			while (m >= 0)
+			{
+				if (c.target[m]->candoaction())
+				{
+					c.target[m]->reducingHP(50);
+					break;
+				}
+				else
+				{
+					m--;
+				}
+			}
+			c.target[c.targetindex]->reducingHP(50);
+		}
 	}
 }
 
-bool Danny::special(Hero::context& c, vector<Effects>& list)
+void Danny::special(Hero::context& c, vector<Effects>& list)
 {
-	if (rounds == activespecialpower)
+	if (reverse)
 	{
-		return 0;
+		c.team[0]->reducingHP(250);
+		Effects e(name, c.team[0]->getname(), 1, -250, c.team[0]->getHP());
+		list.emplace_back(e);
 	}
-	c.team[0]->heal(250);
-	Effects e(name, c.team[0]->getname(), 1, 0, c.team[0]->getHP());
-	list.emplace_back(e);
-	return 1;
+	else
+	{
+		c.team[0]->heal(250);
+		Effects e(name, c.team[0]->getname(), 1, 250, c.team[0]->getHP());
+		list.emplace_back(e);
+	}
+	
+	
 }
