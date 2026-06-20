@@ -3,7 +3,8 @@
 GameManager::GameManager()
 {
 	rounds = 0;
-	specialrounds = 0;
+	specialrounds1 = 0;
+	specialrounds2 = 0;
 	energy1 = 0;
 	energy2 = 0;
 }
@@ -16,9 +17,10 @@ int GameManager::rm(int min, int max)
 	return dist(gen);
 }
 
-void GameManager::nextround()
+void GameManager::nextround() //pouya
 {
-	specialrounds++;
+	specialrounds1++;
+	specialrounds2++;
 	auto it = effectcplayer.begin();
 	while (it != effectcplayer.end())
 	{
@@ -41,8 +43,50 @@ void GameManager::nextround()
 					}
 				}
 			}
+			else if (it->getclassname() == "Pouya" && it->gethp() == 0)
+			{
+				for (auto x : vecplayer1)
+				{
+					if (x->getname()== "Pouya")
+					{
+						x->setishidden(false);
+						int r1;
+						while (1)
+						{
+							r1 = rm(1, 3) - 1;
+							if (vecplayer2[r1]->candoaction())
+							{
+								vecplayer2[r1]->reducingHP(450);
+								break;
+							}
+						}
+					}
+					
+				}
+				for (auto x : vecplayer2)
+				{
+
+					if (x->getname() == "Pouya")
+					{
+						x->setishidden(false);
+						int r1;
+						while (1)
+						{
+							r1 = rm(1, 3) - 1;
+							if (vecplayer1[r1]->candoaction())
+							{
+								vecplayer1[r1]->reducingHP(450);
+								break;
+							}
+						}
+					}
+					
+				}
+			}
+
 			it = effectcplayer.erase(it);
 		}
+		
 		else
 		{
 
@@ -53,7 +97,7 @@ void GameManager::nextround()
 	
 }
 
-void GameManager::doatfirst()
+void GameManager::doatfirst() // poya
 {
 	for (auto x : effectcplayer)
 	{
@@ -134,6 +178,24 @@ void GameManager::doatfirst()
 			}
 			
 		}
+		if (x.getclassname() == "Pouya" && x.gethp() != 0)
+		{
+			for (auto y : vecplayer1)
+			{
+				if (y->getname() == x.getname())
+				{
+					y->reducingHP(x.gethp());
+				}
+
+			}
+			for (auto y : vecplayer2)
+			{
+				if (y->getname() == x.getname())
+				{
+					y->reducingHP(x.gethp());
+				}
+			}
+		}
 	}
 }
 
@@ -187,6 +249,14 @@ void GameManager::creatclass(vector<string>& s,int b)
 			{
 				vecplayer1.emplace_back(new BigTaha);
 			}
+			else if (x == "AQASHAHRIYAR")
+			{
+				vecplayer1.emplace_back(new Shahriyar);
+			}
+			else if (x == "POUYAKAZHDOM")
+			{
+				vecplayer1.emplace_back(new Pouya);
+			}
 		}
 	}
 	if (b == 2)
@@ -213,6 +283,14 @@ void GameManager::creatclass(vector<string>& s,int b)
 			else if (x == "TAHABOZORGE")
 			{
 				vecplayer2.emplace_back(new BigTaha);
+			}
+			else if (x == "AQASHAHRIYAR")
+			{
+				vecplayer1.emplace_back(new Shahriyar);
+			}
+			else if (x == "POUYAKAZHDOM")
+			{
+				vecplayer1.emplace_back(new Pouya);
 			}
 		}
 	}
@@ -244,7 +322,7 @@ void GameManager::doaction1()
 				player.notenough();
 				continue;
 			}
-			if (specialrounds < vecplayer1[z]->countrounds())
+			if (specialrounds1 < vecplayer1[z]->countrounds())
 			{
 				player.special();
 				continue;
@@ -278,7 +356,7 @@ void GameManager::doaction1()
 			}
 			vecplayer1[z]->special(c, effectcplayer);
 			player.Showsentence(vecplayer1[z]->getsentence());
-			specialrounds -= vecplayer1[z]->countrounds();
+			specialrounds1 -= vecplayer1[z]->countrounds();
 			energy1 -= vecplayer1[z]->getenergy(v);
 				
 		}
@@ -356,7 +434,7 @@ void GameManager::doaction2()
 				player.notenough();
 				continue;
 			}
-			if (specialrounds < vecplayer2[z]->countrounds())
+			if (specialrounds2 < vecplayer2[z]->countrounds())
 			{
 				player.special();
 				continue;
@@ -391,7 +469,7 @@ void GameManager::doaction2()
 			}
 			vecplayer2[z]->special(c, effectcplayer);
 			player.Showsentence(vecplayer2[z]->getsentence());
-			specialrounds -= vecplayer2[z]->countrounds();
+			specialrounds2 -= vecplayer2[z]->countrounds();
 			energy2 -= vecplayer2[z]->getenergy(v);
 		}
 		else
@@ -540,15 +618,17 @@ void GameManager::run()
 			nextround();
 		}
 		sortvector();
-		player.showround(rounds,specialrounds);
+		
 		manegmentenergy();
 		player.nameofplayer(name1);
+		player.showround(rounds, specialrounds1);
 		for (auto x : vecplayer2)
 		{
 			player.showstatus(x->getname(),x->getHP());
 		}
 		doaction1();
 		player.nameofplayer(name2);
+		player.showround(rounds, specialrounds2);
 		for (auto x : vecplayer1)
 		{
 			player.showstatus(x->getname(), x->getHP());

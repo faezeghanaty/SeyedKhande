@@ -14,6 +14,17 @@ bool Effects::isactive()
 	return rounds != 0;
 }
 
+long int Effects::gethp()
+{
+
+	return HP;
+}
+
+void Effects::sethp(long int h)
+{
+	HP = h;
+}
+
 int Effects::getpercent()
 {
 	return percent;
@@ -22,6 +33,11 @@ int Effects::getpercent()
 string Effects::getclassname()
 {
 	return classname;
+}
+
+string Effects::getname()
+{
+	return name;
 }
 
 int Effects::applypercent(int x)

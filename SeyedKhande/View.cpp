@@ -15,6 +15,8 @@ void View::change()
 		case 2: name.emplace_back("DANNYGOLANG"); break;
 		case 3: name.emplace_back("AMINIMENI"); break;
 		case 4: name.emplace_back("TAHABOZORGE"); break;
+		case 5: name.emplace_back("AQASHAHRIYAR"); break;
+		case 6: name.emplace_back("POUYAKAZHDOM"); break;
 		}
 	}
 }
@@ -23,12 +25,12 @@ vector<string> View::choosehero()
 {
 	int a, b, c;
 	
-	cout << "0=DRWHITE 1=TAHAKOCHIKE 2=DANNYGOLANG 3=AMINIMENI 4=TAHABOZORGE"  << endl;
+	cout << "0=DRWHITE 1=TAHAKOCHIKE 2=DANNYGOLANG 3=AMINIMENI 4=TAHABOZORGE 5=AQASHAHRIYAR 6=POUYAKAZHDOM"  << endl;
 	while (1)
 	{
 		cout << "Choose the fisrt hero" << endl;
 		cin >> a;
-		if ((0 < a && a< 5) || a == 0)
+		if ((0 < a && a< 7) || a == 0)
 		{
 			heros.emplace_back(a);
 			break;
@@ -38,7 +40,7 @@ vector<string> View::choosehero()
 	{
 		cout << "Choose the second hero" << endl;
 		cin >> b;
-		if (((0 < b && b< 5) || b == 0 ) && a!=b)
+		if (((0 < b && b< 7) || b == 0 ) && a!=b)
 		{
 			heros.emplace_back(b);
 			break;
@@ -48,7 +50,7 @@ vector<string> View::choosehero()
 	{
 		cout << "Choose the third hero" << endl;
 		cin >> c;
-		if (((0 < c  &&c< 5) || c == 0) && c != b && c!=a)
+		if (((0 < c  &&c< 7) || c == 0) && c != b && c!=a)
 		{
 			heros.emplace_back(c);
 			break;

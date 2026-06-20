@@ -6,12 +6,15 @@
 #include "DrWhite.h"
 #include "BigTaha.h"
 #include "SmallTaha.h"
+#include "Shahriyar.h"
+#include "Pouya.h"
 using namespace std;
 class GameManager
 {
 private:
 	int rounds;
-	int specialrounds;
+	int specialrounds1;
+	int specialrounds2;
 	int energy1;
 	int energy2;
 	string name1;
