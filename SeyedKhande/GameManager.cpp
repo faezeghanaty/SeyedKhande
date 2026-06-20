@@ -81,7 +81,7 @@ void GameManager::doatfirst()
 			{
 				if (y->getname() == x.getname())
 				{
-					y->heal(250);
+					y->heal(x.getpercent());
 				}
 
 			}
@@ -89,28 +89,50 @@ void GameManager::doatfirst()
 			{
 				if (y->getname() == x.getname())
 				{
-					y->heal(250);
+					y->heal(x.getpercent());
 				}
 			}
 
 		}
 		if (x.getclassname() == "BigTaha")
 		{
-			for (auto y : vecplayer1)
+			if (x.getname() == "BigTaha")
 			{
-				if (y->getname() == x.getname())
+				for (auto y : vecplayer1)
 				{
-					y->reducingHP(360);
-				}
+					if (y->getname() == x.getname())
+					{
+						y->setishidden(true);
+					}
 
-			}
-			for (auto y : vecplayer2)
-			{
-				if (y->getname() == x.getname())
+				}
+				for (auto y : vecplayer2)
 				{
-					y->reducingHP(360);
+					if (y->getname() == x.getname())
+					{
+						y->reducingHP(360);
+					}
 				}
 			}
+			else
+			{
+				for (auto y : vecplayer1)
+				{
+					if (y->getname() == x.getname())
+					{
+						y->reducingHP(360);
+					}
+
+				}
+				for (auto y : vecplayer2)
+				{
+					if (y->getname() == x.getname())
+					{
+						y->reducingHP(360);
+					}
+				}
+			}
+			
 		}
 	}
 }
@@ -139,9 +161,9 @@ void GameManager::manegmentenergy()
 	}
 }
 
-void GameManager::creatclass(vector<string>& s,int x)
+void GameManager::creatclass(vector<string>& s,int b)
 {
-	if (x == 1)
+	if (b == 1)
 	{
 		for (auto x : s)
 		{
@@ -167,7 +189,7 @@ void GameManager::creatclass(vector<string>& s,int x)
 			}
 		}
 	}
-	if (x == 2)
+	if (b == 2)
 	{
 		for (auto x : s)
 		{
@@ -201,6 +223,7 @@ void GameManager::doaction1()
 	
 	while (energy1 > 0)
 	{
+		sortvector();
 		player.showenergy(energy1);
 		int z = player.whichherodoaction();
 		if (z == 3)
@@ -228,11 +251,30 @@ void GameManager::doaction1()
 			}
 			if (vecplayer1[z]->playerteam(v) == Hero::targetorteamtype::optional)
 			{
-				c.teamindex = player.doactiononwho(nameofhero1);
+				while (1)
+				{
+					int m = player.doactiononwho(nameofhero1);
+					if (vecplayer1[m]->candoaction())
+					{
+						c.teamindex = m;
+						break;
+					}
+					player.isdead(vecplayer1[m]->getname());
+				}
 			}
 			else if (vecplayer1[z]->playertarget(v) == Hero::targetorteamtype::optional)
 			{
-				c.targetindex = player.doactiononwho(nameofhero2);
+				
+				while (1)
+				{
+					int m = player.doactiononwho(nameofhero2);
+					if (vecplayer2[m]->candoaction())
+					{
+						c.teamindex = m;
+						break;
+					}
+					player.isdead(vecplayer2[m]->getname());
+				}
 			}
 			vecplayer1[z]->special(c, effectcplayer);
 			player.Showsentence(vecplayer1[z]->getsentence());
@@ -249,11 +291,29 @@ void GameManager::doaction1()
 			}
 			if (vecplayer1[z]->playerteam(v) == Hero::targetorteamtype::optional)
 			{
-				c.teamindex = player.doactiononwho(nameofhero1);
+				while (1)
+				{
+					int m = player.doactiononwho(nameofhero1);
+					if (vecplayer1[m]->candoaction())
+					{
+						c.teamindex = m;
+						break;
+					}
+					player.isdead(vecplayer1[m]->getname());
+				}
 			}
 			else if (vecplayer1[z]->playertarget(v) == Hero::targetorteamtype::optional)
 			{
-				c.targetindex = player.doactiononwho(nameofhero2);
+				while (1)
+				{
+					int m = player.doactiononwho(nameofhero2);
+					if (vecplayer2[m]->candoaction())
+					{
+						c.teamindex = m;
+						break;
+					}
+					player.isdead(vecplayer2[m]->getname());
+				}
 			}
 			if (v == 1)
 			{
@@ -268,6 +328,7 @@ void GameManager::doaction1()
 		}
 		
 	}
+	sortvector();
 }
 
 void GameManager::doaction2()
@@ -275,6 +336,7 @@ void GameManager::doaction2()
 	player.showenergy(energy2);
 	while (energy2 > 0)
 	{
+		sortvector();
 		int z = player.whichherodoaction();
 		if (z == 3)
 		{
@@ -301,11 +363,31 @@ void GameManager::doaction2()
 			}
 			if (vecplayer2[z]->playerteam(v) == Hero::targetorteamtype::optional)
 			{
-				c.teamindex = player.doactiononwho(nameofhero2);
+				
+				while (1)
+				{
+					int m = player.doactiononwho(nameofhero2);
+					if (vecplayer2[m]->candoaction())
+					{
+						c.teamindex = m;
+						break;
+					}
+					player.isdead(vecplayer2[m]->getname());
+				}
 			}
 			else if (vecplayer2[z]->playertarget(v) == Hero::targetorteamtype::optional)
 			{
-				c.targetindex = player.doactiononwho(nameofhero1);
+				
+				while (1)
+				{
+					int m = player.doactiononwho(nameofhero1);
+					if (vecplayer1[m]->candoaction())
+					{
+						c.teamindex = m;
+						break;
+					}
+					player.isdead(vecplayer1[m]->getname());
+				}
 			}
 			vecplayer2[z]->special(c, effectcplayer);
 			player.Showsentence(vecplayer2[z]->getsentence());
@@ -321,11 +403,32 @@ void GameManager::doaction2()
 			}
 			if (vecplayer2[z]->playerteam(v) == Hero::targetorteamtype::optional)
 			{
-				c.teamindex = player.doactiononwho(nameofhero2);
+				while (1)
+				{
+					int m = player.doactiononwho(nameofhero2);
+					if (vecplayer2[m]->candoaction())
+					{
+						c.teamindex = m;
+						break;
+					}
+					player.isdead(vecplayer2[m]->getname());
+				}
+				
+
 			}
 			else if (vecplayer2[z]->playertarget(v) == Hero::targetorteamtype::optional)
 			{
-				c.targetindex = player.doactiononwho(nameofhero1);
+				
+				while (1)
+				{
+					int m = player.doactiononwho(nameofhero1);
+					if (vecplayer1[m]->candoaction())
+					{
+						c.teamindex = m;
+						break;
+					}
+					player.isdead(vecplayer1[m]->getname());
+				}
 			}
 			if (v == 1)
 			{
@@ -340,6 +443,7 @@ void GameManager::doaction2()
 		}
 
 	}
+	sortvector();
 }
 
 bool GameManager::gameend()
@@ -393,6 +497,18 @@ bool GameManager::gameend()
 
 }
 
+void GameManager::sortvector()
+{
+	sort(vecplayer1.begin(), vecplayer1.end(), [](Hero* a, Hero* b)
+		{
+			return a->getHP() < b->getHP();
+		});
+	sort(vecplayer2.begin(), vecplayer2.end(), [](Hero* a, Hero* b)
+		{
+			return a->getHP() < b->getHP();
+		});
+}
+
 
 void GameManager::run()
 {
@@ -418,9 +534,12 @@ void GameManager::run()
 	}
 	for (rounds = 1; rounds < 15; rounds++)
 	{
-		
-		doatfirst();
-
+		if (rounds > 1)
+		{
+			doatfirst();
+			nextround();
+		}
+		sortvector();
 		player.showround(rounds,specialrounds);
 		manegmentenergy();
 		player.nameofplayer(name1);
@@ -436,7 +555,7 @@ void GameManager::run()
 		}
 		doaction2();
 
-		nextround();
+		
 		if (gameend())
 		{
 			end = true;

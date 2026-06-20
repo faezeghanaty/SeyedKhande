@@ -29,6 +29,7 @@ private:
 	void doaction1();
 	void doaction2();
 	bool gameend();
+	void sortvector();
 	int rm(int min, int max);
 public:
 	GameManager();
