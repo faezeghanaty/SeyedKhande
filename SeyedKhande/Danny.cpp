@@ -128,7 +128,7 @@ void Danny::ability2(Hero::context& c, vector<Effects>& list)
 			}
 		}
 		c.target[c.targetindex]->reducingHP(50, list);
-		if (!found)
+		if (!found) 
 		{
 			throw runtime_error("THERE IS NO ACTIVE PLAYER");
 		}

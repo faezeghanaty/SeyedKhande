@@ -25,7 +25,7 @@ public:
 	int whichherodoaction(vector <string>& name);
 	int whichability();
 	void Showsentence(string sentence);
-	void special();
+	void special(); 
 	void endofgame(int x);
 	void nameofplayer(string name);
 	void nameofhero(string name);

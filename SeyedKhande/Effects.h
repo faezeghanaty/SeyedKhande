@@ -13,7 +13,7 @@ public:
 	void reducingrounds();
 	bool isactive();
 	long int gethp();
-	void sethp(long int h);
+	void sethp(long int h); 
 	int getpercent();
 	string getclassname();
 	string getname();

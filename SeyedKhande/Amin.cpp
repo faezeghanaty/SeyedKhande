@@ -86,7 +86,7 @@ void Amin::special(Hero::context& c, vector<Effects>& list)
 	for (int i = 0;i<3 && found == false;i++)
 	{
 		s = rm(1, 3) - 1;
-		if (c.target[s]->candoaction())
+		if (c.target[s]->candoaction()) 
 		{
 			found = true;
 		}

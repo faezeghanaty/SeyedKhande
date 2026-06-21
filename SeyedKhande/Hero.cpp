@@ -14,7 +14,7 @@ bool Hero::isalive()
 		isdead = true;
 		return false;
 	}
-	return true;
+	return true; 
 }
 
 void Hero::setishidden(bool x)

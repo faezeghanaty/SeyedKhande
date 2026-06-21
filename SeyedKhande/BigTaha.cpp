@@ -22,7 +22,7 @@ Hero::targetorteamtype BigTaha::playertarget(int x)
 	{
 	case 1: return nobody; break;
 	case 2: return optional; break;
-	case 3: return optional; break;
+	case 3: return optional; break; 
 	default: return nobody; break;
 	}
 }

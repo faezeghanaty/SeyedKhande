@@ -79,7 +79,7 @@ void Shahriyar::ability2(Hero::context& c, vector<Effects>& list)
 		{
 			c.target[m]->reducingHP(100, list);
 			found = true;
-			break;
+			break; 
 		}
 	}
 	if (!found)

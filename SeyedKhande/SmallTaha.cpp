@@ -111,6 +111,6 @@ void SmallTaha::special(Hero::context& c, vector<Effects>& list)
 	}
 	if (!found)
 	{
-		throw runtime_error("THERE IS NO ACTIVE PLAYER");
+		throw runtime_error("THERE IS NO ACTIVE PLAYER"); 
 	}
 }

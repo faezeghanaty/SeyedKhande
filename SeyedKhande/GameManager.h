@@ -25,7 +25,7 @@ private:
 	vector <Effects> effectcplayer;
 	void nextround();
 	void doatfirst();
-	void manegmentenergy();
+	void manegmentenergy(); 
 	void creatclass(vector <string>& s, int x);
 	void doaction1();
 	void doaction2();

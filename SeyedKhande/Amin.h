@@ -12,6 +12,6 @@ public:
 	virtual string getsentence();
 	virtual void ability1(Hero::context& c, vector <Effects>& list) override;
 	virtual void ability2(Hero::context& c, vector <Effects>& list) override;
-	virtual void special(Hero::context& c, vector <Effects>& list) override;
+	virtual void special(Hero::context& c, vector <Effects>& list) override; 
 };
 

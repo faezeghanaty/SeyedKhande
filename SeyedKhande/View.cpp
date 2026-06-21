@@ -54,7 +54,7 @@ vector<string> View::choosehero()
 		cin >> c;
 		if (((0 < c  &&c< 7) || c == 0) && c != b && c!=a)
 		{
-			heros.emplace_back(c);
+			heros.emplace_back(c); 
 			break;
 		}
 	}

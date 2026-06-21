@@ -43,7 +43,7 @@ public:
 	virtual string getsentence() = 0;
 	virtual void ability1(context & c,vector <Effects> & list) = 0;
 	virtual void ability2(context& c, vector <Effects>& list) = 0;
-	virtual void special(context& c, vector <Effects>& list) = 0; //false = tedad dor ha kafi nist
+	virtual void special(context& c, vector <Effects>& list) = 0; 
 	virtual targetorteamtype playerteam(int x) = 0;
 	virtual targetorteamtype playertarget(int x) = 0;
 	int rm(int min, int max);

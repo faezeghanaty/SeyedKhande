@@ -12,7 +12,7 @@ Hero::targetorteamtype DrWhite::playerteam(int x)
 	case 1: return random; break;
 	case 2: return optional; break;
 	case 3: return nobody; break;
-	default: return nobody; break;
+	default: return nobody; break; 
 
 	}
 }

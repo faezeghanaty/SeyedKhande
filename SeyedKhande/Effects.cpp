@@ -21,7 +21,7 @@ long int Effects::gethp()
 }
 
 void Effects::sethp(long int h)
-{
+{ 
 	HP = h;
 }
 

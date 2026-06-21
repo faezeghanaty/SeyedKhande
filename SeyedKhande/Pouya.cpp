@@ -13,7 +13,7 @@ Hero::targetorteamtype Pouya::playerteam(int x)
 	case 3: return nobody; break;
 	default: return nobody; break;
 	}
-}
+} 
 
 Hero::targetorteamtype Pouya::playertarget(int x)
 {
