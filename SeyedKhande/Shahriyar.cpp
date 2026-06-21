@@ -1,6 +1,6 @@
 #include "Shahriyar.h"
 
-Shahriyar::Shahriyar() : Hero("Shahriyar",4,"Joker",500,"Khob mishe bad...bad mishe khob...man ki hastam?..aqa shahriyar...boland tekrar konid")
+Shahriyar::Shahriyar() : Hero("AQASHAHRIYAR",4,"Joker",500,"Khob mishe bad...bad mishe khob...man ki hastam?..aqa shahriyar...boland tekrar konid")
 {
 }
 
@@ -44,36 +44,26 @@ string Shahriyar::getsentence()
 
 void Shahriyar::ability1(Hero::context& c, vector<Effects>& list)
 {
-	bool z;
+	bool z=false;
 	int r = rm(1, 20);
 	if (r != 1)
 	{
-		for (auto x : list)
+		if (!list.empty())
 		{
-			if (x.getclassname() == "DrWhite" && name == x && x.isactive())
+			for (auto x : list)
 			{
-				int a = x.applypercent(60);
-				if (reverse)
+				if (x.getclassname() == "DRWHITE" && x == name && x.isactive())
 				{
-					c.target[c.targetindex]->heal(a);
+					int a = x.applypercent(60);
+					c.target[c.targetindex]->reducingHP(a, list);
+					z = true;
 				}
-				else
-				{
-					c.target[c.targetindex]->reducingHP(a);
-				}
-				z = true;
 			}
 		}
-		if (!z)
+		
+		if (z == false)
 		{
-			if (reverse)
-			{
-				c.target[c.targetindex]->heal(60);
-			}
-			else
-			{
-				c.target[c.targetindex]->reducingHP(60);
-			}
+			c.target[c.targetindex]->reducingHP(60,list);
 		}
 	}
 }
@@ -81,25 +71,26 @@ void Shahriyar::ability1(Hero::context& c, vector<Effects>& list)
 void Shahriyar::ability2(Hero::context& c, vector<Effects>& list)
 {
 	int m;
-	while (1)
+	bool found = false;
+	for (int i = 0;i<3 && !found;i++)
 	{
-		int m = rm(1, 3) - 1;
+		m = rm(1, 3) - 1;
 		if (m != c.targetindex && c.target[m]->candoaction())
 		{
+			c.target[m]->reducingHP(100, list);
+			found = true;
 			break;
 		}
 	}
-	if (reverse)
+	if (!found)
 	{
-		c.target[m]->heal(100);
+		throw runtime_error("THERE IS NO ACTIVE PLAYER");
 	}
-	else
-	{
-		c.target[m]->reducingHP(100);
-	}
+	
 }
 
 void Shahriyar::special(Hero::context& c, vector<Effects>& list)
 {
 	Effects e(name, "", 2);
+	list.emplace_back(e);
 }

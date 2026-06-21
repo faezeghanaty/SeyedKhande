@@ -1,6 +1,6 @@
 #include "BigTaha.h"
 
-BigTaha::BigTaha() : Hero("BigTaha",4,"Attacker",500,"In yeki baraye dadash kochikam bood..hala nobat toe")
+BigTaha::BigTaha() : Hero("TAHABOZORGE",4,"Attacker",500,"In yeki baraye dadash kochikam bood..hala nobat toe")
 {
 	
 }
@@ -50,30 +50,17 @@ void BigTaha::ability1(Hero::context& c, vector<Effects>& list)
 	{
 		for (auto x : list)
 		{
-			if (x == name && x.getclassname() == "DrWhite" && x.isactive())
+			if (x == name && x.getclassname() == "DRWHITE" && x.isactive())
 			{
 				int p = x.applypercent(30);
-				if (reverse)
+				for (int y = 0; y < 3; y++)
 				{
-					for (int y = 0; y < 3; y++)
+					if (c.target[y]->isalive())
 					{
-						if (c.target[y]->isalive())
-						{
-							c.target[y]->heal(p);
-						}
-						
+						c.target[y]->reducingHP(p,list);
 					}
 				}
-				else
-				{
-					for (int y = 0; y < 3; y++)
-					{
-						if (c.target[y]->isalive())
-						{
-							c.target[y]->reducingHP(p);
-						}
-					}
-				}
+				
 				a = true;
 			}
 		}
@@ -81,72 +68,36 @@ void BigTaha::ability1(Hero::context& c, vector<Effects>& list)
 	
 	if (!a)
 	{
-		if (reverse)
+		for (int y = 0; y < 3; y++)
 		{
-			for (int y = 0; y < 3; y++)
+			if (c.target[y]->isalive())
 			{
-				if (c.target[y]->isalive())
-				{
-					c.target[y]->heal(30);
-				}
-
+				c.target[y]->reducingHP(30,list);
 			}
 		}
-		else
-		{
-			for (int y = 0; y < 3; y++)
-			{
-				if (c.target[y]->isalive())
-				{
-					c.target[y]->reducingHP(30);
-				}
-			}
-		}
+		
 	}
 }
 
 void BigTaha::ability2(Hero::context& c, vector<Effects>& list)
 {
-	if (reverse)
-	{
-		c.target[c.targetindex]->heal(90);
-	}
-	else
-	{
-		c.target[c.targetindex]->reducingHP(90);
-	}
+	c.target[c.targetindex]->reducingHP(90,list);
+	setishidden(true);
 	Effects e(name, name, 1);
-	
+	list.emplace_back(e);
 }
 
 void BigTaha::special(Hero::context& c, vector<Effects>& list)
 {
-	
 	long int y = c.target[c.targetindex]->getHP();
-	if (reverse)
+	if (y < 360)
 	{
-		if (y < 360)
-		{
-			c.target[c.targetindex]->heal(y);
-		}
-		else
-		{
-			c.target[c.targetindex]->heal(200);
-		}
-		Effects e(name, c.target[c.targetindex]->getname(), 1, -360);
+		c.target[c.targetindex]->reducingHP(y,list);
 	}
 	else
 	{
-		if (y < 360)
-		{
-			c.target[c.targetindex]->reducingHP(y);
-		}
-		else
-		{
-			c.target[c.targetindex]->reducingHP(200);
-		}
-		Effects e(name, c.target[c.targetindex]->getname(), 1, 360);
+		c.target[c.targetindex]->reducingHP(200,list);
 	}
-	
-	
+	Effects e(name, c.target[c.targetindex]->getname(), 1, 360);
+	list.emplace_back(e);
 }

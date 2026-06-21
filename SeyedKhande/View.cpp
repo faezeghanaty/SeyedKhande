@@ -4,8 +4,9 @@ View::View()
 {
 }
 
-void View::change()
+vector <string> View::change(vector <int> & heros)
 {
+	vector <string> name;
 	for (auto x : heros)
 	{
 		switch (x)
@@ -19,12 +20,13 @@ void View::change()
 		case 6: name.emplace_back("POUYAKAZHDOM"); break;
 		}
 	}
+	return name;
 }
 
 vector<string> View::choosehero()
 {
 	int a, b, c;
-	
+	vector <int> heros;
 	cout << "0=DRWHITE 1=TAHAKOCHIKE 2=DANNYGOLANG 3=AMINIMENI 4=TAHABOZORGE 5=AQASHAHRIYAR 6=POUYAKAZHDOM"  << endl;
 	while (1)
 	{
@@ -56,19 +58,19 @@ vector<string> View::choosehero()
 			break;
 		}
 	}
-	change();
-	return name;
+	;
+	return change(heros);
 }
 
 void View::showround(int x,int y)
 {
 	cout << "WE ARE IN ROUND " << x << endl;
-	cout << "YOU HAVE " << y << "ROUNDS TO USE SPECIAL ABILITY" << endl;
+	cout << "YOU HAVE " << y << " ROUNDS TO USE SPECIAL ABILITY" << endl;
 }
 
-void View::showstatus(string name, long int HP)
+void View::showstatus(string name, long int HP,bool cando )
 {
-	cout << name << " HP: " << HP << endl;
+	cout << name << " HP: " << HP << " IS ACTIVE: " << cando << endl;
 }
 
 void View::showenergy(int x)
@@ -81,14 +83,13 @@ void View::notenough()
 	cout << "Energy is not enough!" << endl;
 }
 
-int View::whichherodoaction()
+int View::whichherodoaction(vector <string> & name)
 {
 	int a;
-	cout << "Which one do atacke ? or 3=END OF ATTACKS?" << endl
-		<< "0= " << name[0] << " 1= " << name[1] << " 2= " << name[3] << endl;
 	while (1)
 	{
-		cout << "Choose the fisrt hero" << endl;
+		cout << "Which one do atacke ? or 3=END OF ATTACKS?" << endl
+			<< "0= " << name[0] << " 1= " << name[1] << " 2= " << name[2] << endl;
 		cin >> a;
 		if ((0 < a && a<4) || a == 0)
 		{
@@ -106,7 +107,7 @@ int View::whichability()
 	{
 		cout << "Do What?" << endl << "1=ability1 2=ability2 3=special" << endl;
 		cin >> a;
-		if (0 < a && a<3 )
+		if (0 < a && a<4)
 		{
 			return a;
 		}
@@ -178,6 +179,6 @@ string View::entername()
 
 void View::isdead(string name)
 {
-	cout << name << "is dead!" << endl;
+	cout << name << " is dead!" << endl;
 }
 

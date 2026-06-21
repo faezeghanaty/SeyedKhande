@@ -1,6 +1,6 @@
 #include "Danny.h"
 
-Danny::Danny() : Hero("Danny",4,"Defender",600,"Hichkas iz in khat rad nemishe!")
+Danny::Danny() : Hero("DANNYGOLANG",4,"Defender",600,"Hichkas iz in khat rad nemishe!")
 {
 	d = 1;
 }
@@ -53,37 +53,24 @@ void Danny::ability1(Hero::context& c, vector<Effects>& list)
 			if (x.getclassname() == name && x == c.target[c.targetindex]->getname() && x.isactive())
 			{
 				d *= 1.6;
-				if (reverse)
-				{
-					c.target[c.targetindex]->heal(20 * d);
-				}
-				else
-				{
-					c.target[c.targetindex]->reducingHP(20 * d);
-				}
-				
+				c.target[c.targetindex]->reducingHP(20 * d,list);
 				f = true;
 			}
-			else if (x.getclassname() == "DrWhite" && x == name && x.isactive())
+			else if (x.getclassname() == "DRWHITE" && x == name && x.isactive())
 			{
 				int p = x.applypercent(20);
-				if (reverse)
-				{
-					c.target[c.targetindex]->heal(p);
-				}
-				else
-				{
-					c.target[c.targetindex]->reducingHP(p);
-				}
+				c.target[c.targetindex]->reducingHP(p,list);
 				f = true;
 				Effects e(name, c.target[c.targetindex]->getname(), 1);
+				list.emplace_back(e);
 			}
 		}
 	}
 	if (!f)
 	{
-		c.target[c.targetindex]->reducingHP(20);
+		c.target[c.targetindex]->reducingHP(20,list);
 		Effects e(name, c.target[c.targetindex]->getname(), 1);
+		list.emplace_back(e);
 	}
 	
 
@@ -92,48 +79,33 @@ void Danny::ability1(Hero::context& c, vector<Effects>& list)
 void Danny::ability2(Hero::context& c, vector<Effects>& list)
 {
 	bool a = false;
+	bool found = false;
 	int m = 2;
 	if (!list.empty())
 	{
 		for (auto x : list)
 		{
-			if (x == name && x.getclassname() == "DrWhite" && x.isactive())
+			if (x == name && x.getclassname() == "DRWHITE" && x.isactive())
 			{
 				
 				int p = x.applypercent(50);
-				if (reverse)
+				while (m >= 0)
 				{
-					
-					while (m >=0)
+					if (c.target[m]->candoaction())
 					{
-						if (c.target[m]->candoaction())
-						{
-							c.target[m]->heal(p);
-							break;
-						}
-						else
-						{
-							m--;
-						}
+						c.target[m]->reducingHP(p,list);
+						found = true;
+						break;
 					}
-					
-					c.target[c.targetindex]->heal(p);
+					else
+					{
+						m--;
+					}
 				}
-				else
+				c.target[c.targetindex]->reducingHP(p, list);
+				if (!found)
 				{
-					while (m >= 0)
-					{
-						if (c.target[m]->candoaction())
-						{
-							c.target[m]->reducingHP(p);
-							break;
-						}
-						else
-						{
-							m--;
-						}
-					}
-					c.target[c.targetindex]->reducingHP(p);
+					throw runtime_error("THERE IS NO ACTIVE PLAYER");
 				}
 				
 				a = true;
@@ -142,57 +114,44 @@ void Danny::ability2(Hero::context& c, vector<Effects>& list)
 	}
 	if (!a)
 	{
-		if (reverse)
+		while (m >= 0)
 		{
-
-			while (m >= 0)
+			if (c.target[m]->candoaction())
 			{
-				if (c.target[m]->candoaction())
-				{
-					c.target[m]->heal(50);
-					break;
-				}
-				else
-				{
-					m--;
-				}
+				c.target[m]->reducingHP(50,list);
+				found = true;
+				break;
 			}
-
-			c.target[c.targetindex]->heal(50);
+			else
+			{
+				m--;
+			}
 		}
-		else
+		c.target[c.targetindex]->reducingHP(50, list);
+		if (!found)
 		{
-			while (m >= 0)
-			{
-				if (c.target[m]->candoaction())
-				{
-					c.target[m]->reducingHP(50);
-					break;
-				}
-				else
-				{
-					m--;
-				}
-			}
-			c.target[c.targetindex]->reducingHP(50);
+			throw runtime_error("THERE IS NO ACTIVE PLAYER");
 		}
+		
+		
 	}
 }
 
 void Danny::special(Hero::context& c, vector<Effects>& list)
 {
-	if (reverse)
+	bool found = false;
+	for (int i = 0; i < 3 && !found; i++)
 	{
-		c.team[0]->reducingHP(250);
-		Effects e(name, c.team[0]->getname(), 1, -250, c.team[0]->getHP());
-		list.emplace_back(e);
+		if (c.team[i]->candoaction())
+		{
+			c.team[i]->heal(250, list);
+			Effects e(name, c.team[i]->getname(), 1, 250, c.team[i]->getHP());
+			list.emplace_back(e);
+			found = true;
+		}
 	}
-	else
+	if (!found)
 	{
-		c.team[0]->heal(250);
-		Effects e(name, c.team[0]->getname(), 1, 250, c.team[0]->getHP());
-		list.emplace_back(e);
+		throw runtime_error("THERE IS NO ACTIVE PLAYER");
 	}
-	
-	
 }

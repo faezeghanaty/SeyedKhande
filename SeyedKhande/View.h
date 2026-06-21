@@ -7,8 +7,8 @@ class View
 {
 	
 public:
-	vector <int> heros;
-	vector <string> name;
+	
+	
 	string p1;
 	string p2;
 	enum heroo
@@ -16,13 +16,13 @@ public:
 		DrWhite,SmallTaha,Danny,Amin,BigTaha
 	};
 	View();
-	void change();
+	vector <string> change(vector <int>& heros);
 	vector <string> choosehero();
 	void showround(int x,int y);
-	void showstatus(string name, long int HP);
+	void showstatus(string name, long int HP, bool cando);
 	void showenergy(int x);
 	void notenough();
-	int whichherodoaction();
+	int whichherodoaction(vector <string>& name);
 	int whichability();
 	void Showsentence(string sentence);
 	void special();

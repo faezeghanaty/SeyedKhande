@@ -20,8 +20,6 @@ private:
 	string name1;
 	string name2;
 	View player;
-	vector <string> nameofhero1;
-	vector <string> nameofhero2;
 	vector <Hero*> vecplayer1;
 	vector <Hero*> vecplayer2;
 	vector <Effects> effectcplayer;

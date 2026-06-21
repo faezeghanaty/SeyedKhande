@@ -1,8 +1,10 @@
 #include "Hero.h"
 
 
-Hero::Hero(string name,int active, string role, long int HP, string sentence, bool isdead, bool ishidden) : name(name),activespecialpower(active), role(role), HP(HP), sentence(sentence),maxHP(HP)
+Hero::Hero(string name,int active, string role, long int HP, string sentence) : name(name),activespecialpower(active), role(role), HP(HP), sentence(sentence),maxHP(HP)
 {
+	isdead = false;
+	ishidden = false;
 }
 
 bool Hero::isalive()
@@ -22,7 +24,7 @@ void Hero::setishidden(bool x)
 
 bool Hero::candoaction()
 {
-	return !(isdead && ishidden);
+	return (isalive() && !ishidden);
 }
 
 bool Hero::reverse(vector<Effects>& list)
@@ -33,7 +35,7 @@ bool Hero::reverse(vector<Effects>& list)
 	}
 	for (auto x : list)
 	{
-		if (x.getclassname() == "Shahriyar" && x.isactive())
+		if (x.getclassname() == "AQASHAHRIYAR" && x.isactive())
 		{
 			return 1;
 		}
@@ -61,11 +63,19 @@ int Hero::countrounds()
 	return activespecialpower;
 }
 
-void Hero::heal(long int x)
+void Hero::heal(long int x, vector<Effects>& list)
 {
-	if (!isdead && (HP+x)<maxHP)
+	if ((HP+x)<maxHP)
 	{
-		HP = HP + x;
+		if (reverse(list))
+		{
+			HP = HP - x;
+		}
+		else
+		{
+			HP = HP + x;
+		}
+		
 	}
 	else
 	{
@@ -73,9 +83,17 @@ void Hero::heal(long int x)
 	}
 }
 
-void Hero::reducingHP(long int x)
+void Hero::reducingHP(long int x, vector<Effects>& list)
 {
-	HP = HP - x;
+	if (reverse(list))
+	{
+		HP = HP + x;
+	}
+	else
+	{
+		HP = HP - x;
+	}
+	
 	isalive();
 	
 }

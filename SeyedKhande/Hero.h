@@ -27,7 +27,7 @@ public:
 	};
 	enum targetorteamtype 
 	{highest,optional,random,lowest,nobody};
-	Hero(string name,int active,string role,long int HP,string sentence,bool isdead = false,bool ishidden = false);
+	Hero(string name,int active,string role,long int HP,string sentence);
 	virtual ~Hero() {}
 	bool isalive();
 	void setishidden(bool x);
@@ -37,9 +37,9 @@ public:
 	void setHp(long int hp);
 	string getname() const;
 	int countrounds();
-	void heal(long int x);
-	void reducingHP(long int x);
-	virtual int getenergy(int x) = 0;
+	void heal(long int x, vector<Effects>& list);
+	void reducingHP(long int x, vector<Effects>& list);
+	virtual int getenergy(int x) = 0 ;
 	virtual string getsentence() = 0;
 	virtual void ability1(context & c,vector <Effects> & list) = 0;
 	virtual void ability2(context& c, vector <Effects>& list) = 0;

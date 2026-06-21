@@ -1,6 +1,6 @@
 #include "Pouya.h"
 
-Pouya::Pouya() : Hero("Pouya",3,"Attacker",550,"Nisham ro didi? na ? khob ... dige hichvaqt nemibini")
+Pouya::Pouya() : Hero("POUYAKAZHDOM",3,"Attacker",550,"Nisham ro didi? na ? khob ... dige hichvaqt nemibini")
 {
 }
 
@@ -44,59 +44,36 @@ string Pouya::getsentence()
 
 void Pouya::ability1(Hero::context& c, vector<Effects>& list)
 {
-	bool z;
-	for (auto x : list)
+	bool z=false;
+	if (!list.empty())
 	{
-		if (x.getclassname() == "DrWhite" && name == x && x.isactive())
+		for (auto & x : list)
 		{
-			int a = x.applypercent(40);
-			if (reverse)
+			if (x.getclassname() == "DRWHITE" && name == x && x.isactive())
 			{
-				c.target[c.targetindex]->heal(a);
+				int a = x.applypercent(40);
+				c.target[c.targetindex]->reducingHP(a, list);
+				z = true;
 			}
-			else
-			{
-				c.target[c.targetindex]->reducingHP(a);
-			}
-			z = true;
-		}
-		if (x.getclassname() == name && x==c.target[c.targetindex]->getname() && x.isactive())
-		{
-			if (reverse)
-			{
-				x.sethp(-60);
-			}
-			else
+			if (x.getclassname() == name && x == c.target[c.targetindex]->getname() && x.isactive())
 			{
 				x.sethp(60);
 			}
-			
 		}
 	}
+	
 	if (!z)
 	{
-		if (reverse)
-		{
-			c.target[c.targetindex]->heal(40);
-		}
-		else
-		{
-			c.target[c.targetindex]->reducingHP(40);
-		}
+		c.target[c.targetindex]->reducingHP(40,list);
 	}
 
 }
 
 void Pouya::ability2(Hero::context& c, vector<Effects>& list)
 {
-	if (reverse)
-	{
-		Effects e(name, c.target[c.targetindex]->getname(), 15, 0, -20);
-	}
-	else
-	{
-		Effects e(name, c.target[c.targetindex]->getname(), 15, 0, 20);
-	}
+	Effects e(name, c.target[c.targetindex]->getname(), 15, 0, 20);
+	list.emplace_back(e);
+	
 	
 }
 
@@ -104,5 +81,6 @@ void Pouya::special(Hero::context& c, vector<Effects>& list)
 {
 	
 	Effects e(name,"", 3);
+	list.emplace_back(e);
 	ishidden = true;
 }

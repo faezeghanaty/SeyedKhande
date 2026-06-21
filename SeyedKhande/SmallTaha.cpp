@@ -1,5 +1,5 @@
 #include "SmallTaha.h"
-SmallTaha::SmallTaha() : Hero("SmallTaha",3,"Healer",500,"Hame dar jay khod!in mantaqe alode ast")
+SmallTaha::SmallTaha() : Hero("TAHAKOCHIKE",3,"Healer",500,"Hame dar jay khod!in mantaqe alode ast")
 {
 
 }
@@ -45,19 +45,13 @@ string SmallTaha::getsentence()
 void SmallTaha::ability1(Hero::context& c, vector<Effects>& list)
 {
 	int m = 0;
+	bool found = false;
 	while (m < 3)
 	{
 		if (c.team[m]->candoaction())
 		{
-			if (reverse)
-			{
-				c.team[0]->reducingHP(20);
-			}
-			else
-			{
-				c.team[0]->heal(20);
-			}
-			
+			c.team[0]->heal(20,list);
+			found = true;
 			break;
 		}
 		else
@@ -65,24 +59,19 @@ void SmallTaha::ability1(Hero::context& c, vector<Effects>& list)
 			m++;
 		}
 	}
-	
+	if (!found)
+	{
+		throw runtime_error("THERE IS NO ACTIVE PLAYER");
+	}
 	bool f = false;
 	if (!list.empty())
 	{
 		for (auto x : list)
 		{
-			if (x.getclassname() == "DrWhite" && x == name && x.isactive())
+			if (x.getclassname() == "DRWHITE" && x == name && x.isactive())
 			{
 				int p = x.applypercent(30);
-				if (reverse)
-				{
-					c.target[c.targetindex]->heal(p);
-				}
-				else
-				{
-					c.target[c.targetindex]->reducingHP(p);
-				}
-				
+				c.target[c.targetindex]->reducingHP(p,list);
 				f = true;
 			}
 		}
@@ -90,53 +79,29 @@ void SmallTaha::ability1(Hero::context& c, vector<Effects>& list)
 	
 	if (!f)
 	{
-		if (reverse)
-		{
-			c.target[c.targetindex]->heal(30);
-		}
-		else
-		{
-			c.target[c.targetindex]->reducingHP(30);
-		}
-		
+		c.target[c.targetindex]->reducingHP(30,list);
 	}
 
 }
 
 void SmallTaha::ability2(Hero::context& c, vector<Effects>& list)
 {
-	if (reverse)
-	{
-		c.team[c.teamindex]->reducingHP(40);
-		Effects e("SmallTaha", c.team[c.teamindex]->getname(), 1, -40);
-		list.emplace_back(e);
-	}
-	else
-	{
-		c.team[c.teamindex]->heal(40);
-		Effects e("SmallTaha", c.team[c.teamindex]->getname(), 1, 40);
-		list.emplace_back(e);
-	}
-	
+	c.team[c.teamindex]->heal(40,list);
+	Effects e(name, c.team[c.teamindex]->getname(), 1, 40);
+	list.emplace_back(e);
 
 }
 
 void SmallTaha::special(Hero::context& c, vector<Effects>& list)
 {
 	int m = 0;
+	bool found=false;
 	while (m < 3)
 	{
 		if (c.team[m]->candoaction())
 		{
-			if (reverse)
-			{
-				c.team[0]->reducingHP(200);
-			}
-			else
-			{
-				c.team[0]->heal(200);
-			}
-
+			c.team[m]->heal(200,list);
+			found = true;
 			break;
 		}
 		else
@@ -144,5 +109,8 @@ void SmallTaha::special(Hero::context& c, vector<Effects>& list)
 			m++;
 		}
 	}
-	
+	if (!found)
+	{
+		throw runtime_error("THERE IS NO ACTIVE PLAYER");
+	}
 }

@@ -1,6 +1,6 @@
 #include "DrWhite.h"
 
-DrWhite::DrWhite() : Hero("DrWhite", 4, "Healer", 550, "Biaridesh roy miz ... zende mimone age shanse biyare.")
+DrWhite::DrWhite() : Hero("DRWHITE", 4, "Healer", 550, "Biaridesh roy miz ... zende mimone age shanse biyare.")
 {
 
 }
@@ -11,7 +11,7 @@ Hero::targetorteamtype DrWhite::playerteam(int x)
 	{
 	case 1: return random; break;
 	case 2: return optional; break;
-	case 3: return optional; break;
+	case 3: return nobody; break;
 	default: return nobody; break;
 
 	}
@@ -48,49 +48,39 @@ string DrWhite::getsentence()
 void DrWhite::ability1(Hero::context& c, vector <Effects>& list)
 {
 	bool a = false;
+	bool found = false;
 	int u;
-	while (1)
+	for(int i = 0;i<3;i++)
 	{
 		u = rm(1, 3) - 1;
-		if (c.team[a]->candoaction())
+		if (c.team[u]->candoaction())
 		{
+			c.team[u]->heal(40, list);
+			found = true;
 			break;
 		}
+	}
+	if (!found)
+	{
+		throw runtime_error("THERE IS NO ACTIVE PLAYER");
 	}
 	if (!list.empty())
 	{
 		for (auto x : list)
 		{
-			if (x == name && x.getclassname() == "DrWhite" && x.isactive())
+			if (x == name && x.getclassname() == "DRWHITE" && x.isactive())
 			{
 				int p = x.applypercent(40);
-				if (reverse)
-				{
-					c.team[u]->reducingHP(p);
-					c.target[c.targetindex]->heal(p);
-				}
-				else
-				{
-					c.team[u]->heal(p);
-					c.target[c.targetindex]->reducingHP(p);
-				}
 				
+				c.target[c.targetindex]->reducingHP(p,list);
 				a = true;
 			}
 		}
 	}
 	if (!a)
 	{
-		if (reverse)
-		{
-			c.team[u]->reducingHP(40);
-			c.target[c.targetindex]->heal(40);
-		}
-		else
-		{
-			c.team[u]->heal(40);
-			c.target[c.targetindex]->reducingHP(40);
-		}
+		
+		c.target[c.targetindex]->reducingHP(40,list);
 		
 	} 
 
@@ -106,9 +96,14 @@ void DrWhite::ability2(Hero::context& c, vector <Effects>& list)
 
 void DrWhite::special(Hero::context& c, vector <Effects>& list)
 {
-	if (!c.team[c.teamindex]->isalive())
+	bool found = false;
+	for (int i = 0; i < 3 && !found; i++)
 	{
-		int z = c.team[c.teamindex]->getHP();
-		c.team[c.teamindex]->heal(z + 200);
+		if (!c.team[i]->isalive() && c.team[i]->getname() != name)
+		{
+			int z = c.team[i]->getHP();
+			c.team[i]->heal(-z + 200, list);
+			found = true;
+		}
 	}
 }
